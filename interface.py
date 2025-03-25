@@ -4,13 +4,16 @@ import board
 class Interface:
     def __init__(self, win):
         self.win=win
-        self.width, self.height = self.win.get_size()
-        self.board = board.Board(self.win)
 
-        self.bmargin = 0.1 # board margin to window (%)
+        self.b_img = pygame.image.load("board.png").convert_alpha() # board image
+        self.b_pos = (0, 0) # board top-left corner position
+        self.b_size = 0.6 # board size relative to window (%)
+        self.b_margin = 0.1 # board margin to window (%)
 
     def update(self):
-        self.width, self.height = self.win.get_size()
+        return
+
+
 
 
     def main_menu(self):
@@ -19,3 +22,12 @@ class Interface:
     def game(self):
 
         return
+
+    def draw_board(self):
+        self.b_pos= self.win.get_size()*self.b_margin
+
+        b_dim= self.win.getsize()*(9/16, 1)
+
+        self.b_img = pygame.transform.scale(self.b_img, b_dim)  # Resize the image (optional)
+
+        self.win.blit(self.b_img, self.b_pos)

@@ -8,8 +8,6 @@ class Board:
         self.white = (238, 238, 210)
         self.black = (118, 150, 86)
 
-        self.draw()
-
     def draw(self):
         #resizes the image and draws it
         self.scale()
