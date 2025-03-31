@@ -7,7 +7,7 @@ class Interface:
         self.b_img = pygame.image.load("board.png").convert_alpha() # board image
         self.b_pos = (0, 0) # tuple - board top-left corner position
         self.b_size = 0.9 # board size relative to window height (%)
-        self.b_margin = 0.05 # board margin to window height (%)
+        self.b_margin = (1-self.b_size)/2 # board margin to window height (%)
 
     def update(self):
         return
@@ -25,7 +25,7 @@ class Interface:
     def draw_board(self):
         #defining position coords
         #b_x, b_y= self.win.get_size() # get window size (for any resizing)
-        b_m= self.win.get_size()[1]*self.b_margin # take the percentage for the margin
+        b_pos= self.win.get_size()[1]*self.b_margin # take the percentage for the margin
 
         #defining board size
         b_dim= self.win.get_size() # get window size (for any resizing)
@@ -33,11 +33,22 @@ class Interface:
 
         board = pygame.transform.scale(self.b_img, (b_s, b_s))  # actual resizing of the image, with adjusted size
 
-        self.round_corners(board, round(b_m*(0.01/0.05))) # round corners -> 1% of screen height
+        self.round_corners(board, round(self.win.get_size()[1]*0.01)) # round corners -> 1% of screen height
 
-        self.win.blit(board, (b_m, b_m)) # draw the board on top-left corner coords
+        self.win.blit(board, (b_pos, b_pos)) # draw the board on top-left corner coords
 
-        
+    def draw_sidebar(self):
+        sdb_posx = self.win.get_size()[0]*9/16
+        sdb_posy = self.win.get_size()[1]*self.b_margin
+
+        sdb_dimx, sdb_dimy = self.win.get_size()
+        sdb_dimx = sdb_dimx*6.5/16
+        sdb_dimy = sdb_dimy*self.b_size
+
+        sidebar=pygame.Surface((sdb_dimx, sdb_dimy), pygame.SRCALPHA)
+        sidebar.fill((0, 0, 0, 256*0.4))
+        self.round_corners(sidebar, round(self.win.get_size()[1]*0.01))
+        self.win.blit(sidebar, (sdb_posx, sdb_posy))
     
     def round_corners(self, img, r):
          # Create a transparent mask surface
