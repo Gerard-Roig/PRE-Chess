@@ -3,7 +3,8 @@ import interface as win
 
 # Constants
 WIDTH, HEIGHT = 640,360  # Board size
-RATIO = 16/9
+MIN_RATIO = 1
+MAX_RATIO = 2
 # WHITE = (238, 238, 210) # Unused
 # BLACK = (118, 150, 86) # Unused
 BACKGROUND = (48, 46, 43)
@@ -25,14 +26,22 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-            # Handle window resizing, follows these rules:
+            # Handle window resizing
+            """
+            There is a minimum resolution of 1:1, this means 
+            The board adapts to window's height, while the width has no limit up to what would make the window have a resolution of 16:9
+            
+            """
             if event.type == pygame.VIDEORESIZE:
                 WIDTH,HEIGHT = pygame.display.get_window_size()
-                #WIDTH = HEIGHT*RATIO
-                WIN = pygame.display.set_mode((WIDTH, HEIGHT), pygame.RESIZABLE) # Update window size
+                
+                if WIDTH/HEIGHT < MIN_RATIO:
+                    HEIGHT, WIDTH = max(HEIGHT,WIDTH), max(HEIGHT,WIDTH)
 
-                print(WIDTH)
-                print(HEIGHT)
+                if WIDTH/HEIGHT > MAX_RATIO:
+                    HEIGHT, WIDTH = min(HEIGHT,WIDTH), min(HEIGHT,WIDTH)*MAX_RATIO
+
+                WIN = pygame.display.set_mode((WIDTH, HEIGHT), pygame.RESIZABLE) # Update window size
 
                 WIN.fill(BACKGROUND)
                 interface.draw_board()
